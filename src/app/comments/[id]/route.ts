@@ -75,4 +75,18 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         });
     }
 }
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id, 10);
+    if (isNaN(id)) {
+        return new Response("Invalid ID", { status: 400 });
+    }
+
+    const index = comments.findIndex((comment) => comment.id === id);
+    if (index === -1) {
+        return new Response("Comment not found", { status: 404 });
+    }
+
+    comments.splice(index, 1);
+    return new Response("Comment deleted", { status: 200 });
+}
 
